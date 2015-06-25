@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="col-sm-4">
+    <form method="post" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3" for="">Schema</label>
+            <div class="col-sm-9">
+                <textarea name="schema" class="form-control" rows="3" placeholder="">{{template}}</textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+{% endblock %}

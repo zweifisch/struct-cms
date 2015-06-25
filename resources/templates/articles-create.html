@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="col-sm-4">
+    <form method="post" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3" for="">ID</label>
+            <div class="col-sm-9"><input name="id" class="form-control" placeholder="unique id under current namespace"></div>
+        </div>
+        {% for field in schema %}
+        <div class="form-group">
+            <label class="col-sm-3" for="">{% firstof field.label field.name %}</label>
+            <div class="col-sm-9">
+                {% ifequal field.type "string" %}
+                <input name="{{ field.name }}" class="form-control" placeholder="">
+                {% endifequal %}
+                {% ifequal field.type "text" %}
+                <textarea name="{{ field.name }}" class="form-control" placeholder=""></textarea>
+                {% endifequal %}
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+</div>
+
+{% endblock %}

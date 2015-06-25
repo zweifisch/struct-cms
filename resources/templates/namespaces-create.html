@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="col-sm-4">
+    <form method="post" action="/namespaces" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3" for="">Name</label>
+            <div class="col-sm-9"><input name="name" class="form-control" id="" placeholder=""></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3" for="">Name</label>
+            <div class="col-sm-9">
+                <select class="form-control" name="template">
+                    {% for t in templates %}
+                    <option>{{t}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -6,7 +6,7 @@
             [compojure.response :refer [Renderable]]
             [ring.util.anti-forgery :refer [anti-forgery-field]]
             [ring.middleware.anti-forgery :refer [*anti-forgery-token*]]
-            [environ.core :refer [env]]))
+            [aussen.core :refer [env]]))
 
 (declare ^:dynamic *identity*)
 (declare ^:dynamic *servlet-context*)

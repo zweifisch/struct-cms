@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+
+<ol class="breadcrumb">
+    <li><a href="/users">Users</a></li>
+    <li class="active">{{id}}</li>
+</ol>
+
+<div>
+    <span>Role: </span>
+    <span class="label label-primary">{{item.role}}</span>
+</div>
+
+<table class="table">
+    {% for item in namespaces %}
+    <tr>
+        <td><a href="/namespaces/{{item}}">{{item}}</a></td>
+        <td>
+            <form method="post" action="/users/{{id}}/namespaces/{{item}}/delete">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<form class="form-inline" method="post" action="/users/{{id}}/namespaces">
+    <div class="form-group">
+        <select class="form-control" name="namespace">
+            {% for item in all-namespaces %}
+            <option>{{item}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-primary">Assign</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+
+<table class="table">
+    {% for template in templates %}
+    <tr>
+        <td>
+            <a href="/templates/{{template}}">{{template}}</a><br>
+        </td>
+        <td>
+            <form method="post" action="/templates/{{template}}/delete">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/templates/new" class="btn btn-primary">Add</a>
+
+{% endblock %}

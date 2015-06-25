@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block root %}
+<div id="navbar">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">SCMS</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    {% ifequal identity.role ":admin" %}
+                    <li {% ifequal current "dashboard" %}class="active"{% endifequal %}><a href="/">Dashboard</a></li>
+                    <li {% ifequal current "users" %}class="active"{% endifequal %}><a href="/users">Users</a></li>
+                    <li {% ifequal current "templates" %}class="active"{% endifequal %}><a href="/templates">Templates</a></li>
+                    <li {% ifequal current "namespaces" %}class="active"{% endifequal %}><a href="/namespaces">Namespaces</a></li>
+                    {% endifequal %}
+                    {% ifequal identity.role ":editor" %}
+                    <li {% ifequal current "namespaces" %}class="active"{% endifequal %}><a href="/">Home</a></li>
+                    {% endifequal %}
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% block body %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

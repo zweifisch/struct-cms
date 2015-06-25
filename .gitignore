@@ -8,3 +8,6 @@ pom.xml
 /.lein-*
 /.env
 *.log
+/resources/public/js
+/.nrepl-port
+/*-init.clj

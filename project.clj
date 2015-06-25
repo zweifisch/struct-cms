@@ -1,14 +1,16 @@
-(defproject cms "0.1.0-SNAPSHOT"
+(defproject cms "0.1.0"
 
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
   :dependencies [[org.clojure/clojure "1.7.0-RC1"]
                  [selmer "0.8.2"]
-                 [com.taoensso/timbre "3.4.0"]
+                 [com.taoensso/carmine "2.11.1"]
                  [com.taoensso/tower "3.0.2"]
+                 [com.taoensso/timbre "3.4.0"]
                  [markdown-clj "0.9.66"]
                  [environ "1.0.0"]
+                 [aussen "0.1.0"]
                  [compojure "1.3.4"]
                  [ring/ring-defaults "0.1.5"]
                  [ring/ring-session-timeout "0.1.0"]
@@ -27,37 +29,27 @@
                  [reagent-utils "0.1.4"]
                  [secretary "1.2.3"]
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
-                 [cljs-ajax "0.3.12"]]
+                 [clj-yaml "0.4.0"]
+                 [cljs-ajax "0.3.13"]]
 
   :min-lein-version "2.0.0"
   :uberjar-name "cms.jar"
   :jvm-opts ["-server"]
 
-;;enable to start the nREPL server when the application launches
-;:env {:repl-port 7001}
+  ;;enable to start the nREPL server when the application launches
+  :env {:repl-port 7001}
 
   :main cms.core
 
   :plugins [[lein-ring "0.9.1"]
             [lein-environ "1.0.0"]
             [lein-ancient "0.6.5"]
-            [lein-cljsbuild "1.0.6"]
-            [lein-sassc "0.10.4"]]
-  
-
-  :sassc [{:src "resources/scss/screen.scss"
-  :style "nested"
-  :output-to "resources/public/css/screen.css"
-  :import-path "resources/scss"}]
-
-  :hooks [leiningen.sassc]
-  
+            [lein-cljsbuild "1.0.6"]]
   
   :ring {:handler cms.handler/app
          :init    cms.handler/init
          :destroy cms.handler/destroy
          :uberwar-name "cms.war"}
-
   
   :clean-targets ^{:protect false} ["resources/public/js"]
   
@@ -72,35 +64,33 @@
       :output-to "resources/public/js/app.js"
       :pretty-print true}}}}
   
-  
   :profiles
   {:uberjar {:omit-source true
              :env {:production true}
-              :hooks [leiningen.cljsbuild]
-              :cljsbuild
-              {:jar true
-               :builds
-               {:app
-                {:source-paths ["env/prod/cljs"]
-                 :compiler {:optimizations :advanced :pretty-print false}}}} 
+             :hooks [leiningen.cljsbuild]
+             :cljsbuild
+             {:jar true
+              :builds
+              {:app
+               {:source-paths ["env/prod/cljs"]
+                :compiler {:optimizations :advanced :pretty-print false}}}} 
              
              :aot :all}
    :dev {:dependencies [[ring-mock "0.1.5"]
                         [ring/ring-devel "1.3.2"]
                         [pjstadig/humane-test-output "0.7.0"]
-                        [weasel "0.7.0"]
                         [lein-figwheel "0.3.3"]
-                        [org.clojure/tools.nrepl "0.2.10"]
-                        [com.cemerick/piggieback "0.2.1"]]
+                        [org.clojure/tools.nrepl "0.2.10"]]
          :plugins [[lein-figwheel "0.3.3"]]
-          :cljsbuild
-          {:builds
-           {:app
-            {:source-paths ["env/dev/cljs"] :compiler {:source-map true}}}} 
+         :cljsbuild
+         {:builds
+          {:app
+           {:source-paths ["env/dev/cljs"] :compiler {:source-map true}}}} 
          
          :figwheel
          {:http-server-root "public"
           :server-port 3449
+          :nrepl-port 7002
           :css-dirs ["resources/public/css"]
           :ring-handler cms.handler/app}
          

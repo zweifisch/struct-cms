@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+
+<table class="table">
+    {% for item in items %}
+    <tr>
+        <td><a href="/users/{{item}}">{{item}}</a></td>
+        <td>
+            <form method="post" action="/users/{{item}}/delete">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="/users/new" class="btn btn-primary">Add</a>
+
+{% endblock %}

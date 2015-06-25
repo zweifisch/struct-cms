@@ -2,7 +2,7 @@
   (:require [cms.handler :refer [app init destroy]]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.reload :as reload]
-            [environ.core :refer [env]])
+            [aussen.core :refer [env]])
   (:gen-class))
 
 (defonce server (atom nil))

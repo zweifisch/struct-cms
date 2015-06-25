@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Welcome to cms</title>
+        <link rel="stylesheet" href="/vendor/bootstrap.min.css">
+        <link rel="stylesheet" href="/vendor/bootstrap-theme.min.css">
+        {% style "/css/screen.css" %}
+    </head>
+    <body>
+        {% block root %}{% endblock %}
+        <script type="text/javascript">
+         var context = "{{servlet-context}}";
+        </script>
+    </body>
+</html>
+

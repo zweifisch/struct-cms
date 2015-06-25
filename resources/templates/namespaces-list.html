@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block body %}
+
+<table class="table">
+    {% for item in namespaces %}
+    <tr>
+        <td>
+            <a href="/namespaces/{{item.id}}">{{item.id}}</a>
+            <span class="badge">{{item.count}}</span>
+        </td>
+        <td>
+            <form method="post" action="/namespaces/{{item.id}}/delete">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/namespaces/new" class="btn btn-primary">Add</a>
+
+{% endblock %}

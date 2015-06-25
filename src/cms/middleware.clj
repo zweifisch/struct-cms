@@ -1,8 +1,7 @@
 (ns cms.middleware
-  (:require [cms.session :as session]
-            [cms.layout :refer [*servlet-context*]]
+  (:require [cms.layout :refer [*servlet-context*]]
             [taoensso.timbre :as timbre]
-            [environ.core :refer [env]]
+            [aussen.core :refer [env]]
             [clojure.java.io :as io]
             [selmer.middleware :refer [wrap-error-page]]
             [prone.middleware :refer [wrap-exceptions]]
@@ -12,13 +11,15 @@
             [ring.middleware.session-timeout :refer [wrap-idle-session-timeout]]
             [ring.middleware.session.memory :refer [memory-store]]
             [ring.middleware.format :refer [wrap-restful-format]]
-            
+            [ring.middleware.http-response :refer [wrap-http-response]]
+            [ring.middleware.session.cookie :refer [cookie-store]]
             [buddy.auth.middleware :refer [wrap-authentication]]
+            [buddy.auth.accessrules :refer [wrap-access-rules]]
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth.accessrules :refer [restrict]]
             [buddy.auth :refer [authenticated?]]
-            [cms.layout :refer [*identity*]]
-            ))
+            [taoensso.carmine.ring :refer [carmine-store]]
+            [cms.layout :refer [*identity*]]))
 
 (defn wrap-servlet-context [handler]
   (fn [request]
@@ -68,22 +69,32 @@
     (binding [*identity* (or (get-in request [:session :identity]) nil)]
       (handler request))))
 
+(def rules [{:pattern #"(^/login$|^/api/.*|^/api$|^/env$|^/install$)" :handler (fn [req] true)}
+            {:pattern #"(^/users/.*|^/users|^/namespaces|^/templates/.*|^/templates)"
+             :handler (fn [req] (= :admin (-> req :session :identity :role)))}
+            {:pattern #"^/.*" :handler authenticated?}])
+
+(defn on-error [request value] (redirect "/login"))
+
 (defn wrap-auth [handler]
   (-> handler
       wrap-identity
+      (wrap-access-rules {:rules rules :on-error on-error})
       (wrap-authentication (session-backend))))
 
 (defn wrap-base [handler]
   (-> handler
-      wrap-dev
+      ;; wrap-dev
       wrap-auth
       (wrap-idle-session-timeout
-        {:timeout (* 60 30)
-         :timeout-response (redirect "/")})
+       {:timeout 86400
+        :timeout-response (redirect "/")})
       wrap-formats
       (wrap-defaults
-        (-> site-defaults
-            (assoc-in [:security :anti-forgery] false)
-            (assoc-in  [:session :store] (memory-store session/mem))))
+       (-> site-defaults
+           (assoc-in [:security :anti-forgery] false)
+           (assoc-in [:session :store] (carmine-store {:spec (:redis env)} {:key-prefix (-> env :session :prefix)
+                                                                            :expiration-secs (-> env :session :ttl)}))))
       wrap-servlet-context
+      wrap-http-response
       wrap-internal-error))

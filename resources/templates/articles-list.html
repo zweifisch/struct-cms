@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+
+<table class="table">
+    {% for item in namespaces %}
+    <tr>
+        <td>
+            <a href="/namespaces/{{item.id}}">{{item.id}}</a>
+            <span class="badge">{{item.count}}</span>
+        </td>
+        <td>
+            <a class="btn btn-default" href="/namespaces/{{item.id}}/articles/new">Write</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
